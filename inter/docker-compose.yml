@@ -1,0 +1,30 @@
+version: '3.0'
+services:
+
+  postgres-db:
+    container_name: postgres
+    image: postgres:14.5
+    env_file: .env
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=$PASSWORD_POSTGRES
+    ports:
+      - 5432:5432
+    volumes:
+      - /media/data/postgres/db:/var/lib/postgresql/data
+    networks:
+      - db-net
+
+  pgadmin:
+    container_name: pgadmin
+    image: thajeztah/pgadmin4
+    ports:
+      - 5050:5050
+    networks:
+      - db-net
+    depends_on:
+      - postgres-db
+
+networks:
+  db-net:
+    driver: bridge
